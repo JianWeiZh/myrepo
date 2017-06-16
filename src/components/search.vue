@@ -50,7 +50,7 @@
 	export default {
 		mounted:function(){
 			let str = localStorage.getItem("address");
-			let str01 = localStorage.getItem("srcHistory");
+			let str01 = localStorage.getItem("srcHistory")?localStorage.getItem("srcHistory"):"";
 			let that = this;
 			if(str!=null){
 				this.address = str;
@@ -91,7 +91,7 @@
 				this.$http.get(url).then((res)=>{
 					let oldSrcName = localStorage.getItem("srcHistory");
 					let newSrcName;
-					if(oldSrcName.length!=null){
+					if(oldSrcName&&oldSrcName.length!=null){
 						newSrcName = oldSrcName+this.srcName+',';
 					}else{
 						newSrcName = this.srcName + ',';
@@ -111,8 +111,8 @@
 			},
 			listenVal:function(e){
 				if(this.srcName.length==0){
-					let srcHistory = localStorage.getItem("srcHistory").split(",");
-					if(srcHistory!=null&&srcHistory.length!=0){
+					let srcHistory = localStorage.getItem("srcHistory")?localStorage.getItem("srcHistory").split(","):"";
+					if(srcHistory&&srcHistory!=null&&srcHistory.length!=0){
 						this.srcHistory = [];
 						srcHistory.map((val,index)=>{
 							if(index == srcHistory.length-1){
