@@ -5,6 +5,7 @@ import Hello from '@/components/Hello'
 import Search from '@/components/search'
 import Mine from '@/components/mine'
 import Address from '@/components/address'
+import login from '@/components/login'
 
 Vue.use(Router)
 Vue.use(Resource)
@@ -27,6 +28,10 @@ export default new Router({
     	path: '/search/address',
     	name: 'Address',
     	component: Address
+    },{
+      path: '/login',
+      name: 'login',
+      component: login
     }
   ]
 })
