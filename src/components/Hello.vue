@@ -6,7 +6,7 @@
           <span class="info">
               10秒钟定制职位
           </span>
-          <a class="go" href="javascript:;" target="_self">
+          <a class="go" href="javascript:;" target="_self" @click="tologin">
               <em class="icon"></em>
               <em class="text">去登录</em>
           </a>
@@ -95,6 +95,9 @@ export default {
     loaded:function(a,e){
       e.target.innerHTML = a;
       this.loadding(e,true);
+    },
+    tologin:function(){
+      this.$router.push('/login');
     }
   }
 }
