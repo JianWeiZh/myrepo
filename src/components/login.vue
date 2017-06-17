@@ -4,11 +4,12 @@
 		     <form data-view="loginView"> 
 		    	 <div class="new_register">
 		    		<div data-propertyname="username" data-controltype="Phone" style="display: block;">
-		    			<input type="text" placeholder="已验证手机/邮箱" class="border_btm r_email top">
+		    			<input type="text" placeholder="已验证手机/邮箱" class="border_btm r_email top" v-model="username">
+		    			<span v-show="showing" data-valid-message class="input_tips">请输入有效账号</span>
 		    		</div>
 		    		<div data-propertyname="password" data-controltype="Password" style="display: block;">
 						<div>
-							<input type="password" placeholder="密码" class="r_psw btm" maxlength="16">
+							<input type="password" placeholder="密码" class="r_psw btm" maxlength="16" v-model="password">
 							<i class="eye" :class="{openeye:closeeye}" @click="changeeye"></i>
 						</div>
 		    			
@@ -24,7 +25,7 @@
 		         </div> 
 		         <!-- 验证码  -->
 		    	 <div data-propertyname="submit" data-controltype="Botton" style="display: block;">
-		    		<input type="button" class="btn_green" value="登录">
+		    		<input type="button" class="btn_green" value="登录" @click="login">
 		    	</div> 
 		    	
 		     </form>
@@ -38,16 +39,28 @@
 		name: 'login',
 		data(){
 			return {
-				closeeye:false
+				closeeye: false,
+				showing: false,
+				username: '',
+				password: ''
 			}
 		},
 		methods:{
-			changeeye:function(){
+			changeeye:function(event){
+				let a = document.getElementsByTagName(event.target.tagName)[0].parentNode.children;
 				if(this.closeeye){
 					this.closeeye = false;
+					a[0].type = 'password';
 				}else{
 					this.closeeye = true;
+					a[0].type = 'text';
 				}
+			},
+			login:function(){
+
+			},
+			testing:function(u,p){
+				
 			}
 		}
 	}
@@ -70,6 +83,14 @@
 		    	margin-top:0em;
 		    	.new_register{
 		    		position:relative;
+		    		span{
+		    			position: absolute;
+					    right: 5%;
+					    top: 36%;
+					    font-size: 0.7em;
+					    color: #f94e4e;
+					    line-height: 1.2;
+		    		}
 		    		div{
 		    			position:relative;
 		    			input{
