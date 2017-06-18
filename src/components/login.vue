@@ -4,15 +4,15 @@
 		     <form data-view="loginView"> 
 		    	 <div class="new_register">
 		    		<div data-propertyname="username" data-controltype="Phone" style="display: block;">
-		    			<input type="text" placeholder="已验证手机/邮箱" class="border_btm r_email top" v-model="username">
-		    			<span v-show="showing" data-valid-message class="input_tips">请输入有效账号</span>
+		    			<input type="text" placeholder="已验证手机/邮箱" class="border_btm r_email top" v-model="username" @focus="hideerror('ushowing')">
+		    			<span v-show="ushowing" data-valid-message class="input_tips">请输入有效账号</span>
 		    		</div>
 		    		<div data-propertyname="password" data-controltype="Password" style="display: block;">
 						<div>
-							<input type="password" placeholder="密码" class="r_psw btm" maxlength="16" v-model="password">
+							<input type="password" placeholder="密码" class="r_psw btm" maxlength="16" v-model="password" @focus="hideerror('pashowing')">
 							<i class="eye" :class="{openeye:closeeye}" @click="changeeye"></i>
 						</div>
-		    			
+		    			<span data-valid-message class="input_tips" v-show="pashowing">请输入密码</span>
 		    		</div>
 		    		
 	    		</div>
@@ -40,7 +40,8 @@
 		data(){
 			return {
 				closeeye: false,
-				showing: false,
+				ushowing: false,
+				pashowing: false,
 				username: '',
 				password: ''
 			}
@@ -57,10 +58,31 @@
 				}
 			},
 			login:function(){
-
+				let vm = this;
+				this.testing(this.username,this.password);
+				// this.$http.post('https://passport.lagou.com/login/login.json',{isValidate:true,username:vm.username,password})
 			},
 			testing:function(u,p){
-				
+				let regPhone = /^(0|86|17951)?((13[0-9]|15[012356789]|17[0135678]|18[0-9]|14[57])[0-9]{8})$/;
+				let regEmail =  /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
+				let regparseword = /^[\\S\\s]{6,16}$/;
+				if(!regPhone.test(u)&&!regEmail.test(u)){
+					this.ushowing = true;
+					return ;
+				}
+				if(!regparseword.test(p)){
+					this.pashowing = true;
+					return ;
+				}
+			},
+			hideerror:function(a){
+				console.log(a);
+				if(a==='ushowing'){
+					this.ushowing = false;
+				}else{
+					this.pashowing = false;
+				}
+					
 			}
 		}
 	}
@@ -90,6 +112,10 @@
 					    font-size: 0.7em;
 					    color: #f94e4e;
 					    line-height: 1.2;
+		    		}
+		    		[data-valid-message]{
+		    			right: 13%;
+    					top: 42%;
 		    		}
 		    		div{
 		    			position:relative;
