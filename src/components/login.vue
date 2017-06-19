@@ -35,6 +35,7 @@
 	</div>
 </template>
 <script>
+	import {Toast} from 'mint-ui';
 	export default{
 		name: 'login',
 		data(){
@@ -43,7 +44,8 @@
 				ushowing: false,
 				pashowing: false,
 				username: '',
-				password: ''
+				password: '',
+				msg:''
 			}
 		},
 		methods:{
@@ -60,12 +62,65 @@
 			login:function(){
 				let vm = this;
 				this.testing(this.username,this.password);
-				// this.$http.post('https://passport.lagou.com/login/login.json',{isValidate:true,username:vm.username,password})
+				let url = '/login.json';
+				let json = {
+							isValidate:true,
+							username:vm.username,
+							password:vm.password,
+							request_form_verifyCode:''
+						}
+				this.$http.post(url,json).then((res)=>{
+					let data = JSON.parse(res.bodyText);
+					let state = data.state;
+					switch(state){
+						case 1:
+							vm.msg = '成功'
+							break;
+						case 210:
+							vm.msg = '请输入有效账号'
+							break;
+						case 211:
+							vm.msg = '请输入6-18位密码'
+							break;
+						case 220:
+							vm.msg = '请输入有效账号'
+							break;
+						case 240:
+							vm.msg = '请输入常用账号'
+							break;
+						case 241:
+							vm.msg = '请输入密码'
+							break;
+						case 299:
+							vm.msg = '你得操作泰国频繁，请稍后再试'
+							break;
+						case 400:
+							vm.msg = '密码错误'
+							break;
+						case 500:
+							vm.msg = '系统错误'
+							break;
+						case 10010:
+							vm.msg = '验证码不正确'
+							break;
+						case 10011:
+							vm.msg = '操作太频繁'
+							break;
+						case 10012:
+							vm.msg = '永久封禁'
+							break;
+					}
+					Toast(vm.msg);
+					setTimeout(()=>{
+						this.$router.push('/');
+					},2000);
+						
+				})
 			},
 			testing:function(u,p){
 				let regPhone = /^(0|86|17951)?((13[0-9]|15[012356789]|17[0135678]|18[0-9]|14[57])[0-9]{8})$/;
 				let regEmail =  /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
-				let regparseword = /^[\\S\\s]{6,16}$/;
+				let regparseword = /^[0-9a-zA-Z!@.#$^]{6,18}$/;
 				if(!regPhone.test(u)&&!regEmail.test(u)){
 					this.ushowing = true;
 					return ;
@@ -76,7 +131,6 @@
 				}
 			},
 			hideerror:function(a){
-				console.log(a);
 				if(a==='ushowing'){
 					this.ushowing = false;
 				}else{

@@ -41,6 +41,13 @@ module.exports = {
             pathRewrite: {
               '^/search.json': ''
             }
+        },
+        "/login.json":{
+            target: 'https://passport.lagou.com/login/login.json',
+            changeOrigin: true,
+            pathRewrite: {
+                '^/login.json':''
+            }
         }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"

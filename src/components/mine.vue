@@ -4,18 +4,18 @@
 		<div id="content01">
 	        <div class="logininfo">
                 <div class="nologin center">
-                    <a class="loginbut" href="/frontLogin.do" target="_self">登录 / 注册</a>
+                    <a class="loginbut" href="javascript:;" target="_self" @click="tologin">登录 / 注册</a>
                 </div>
             </div>
 	        <div class="buttons">
-	            <a class="button deliver" href="/user/deliverlist.html">
+	            <a class="button deliver" href="javascript:;" @click="tologin">
 	                <span>投递</span>
 	            </a>
-	            <a class="button interview" href="/minterview/interviewlist.html">面试</a>
-	            <a class="button invitation" href="/minvite/invitation.html">
+	            <a class="button interview" href="javascript:;" @click="tologin">面试</a>
+	            <a class="button invitation" href="javascript:;" @click="tologin">
 	                <span>邀约</span>
                 </a>
-	            <a class="button collect" href="/user/collectlist.html">收藏</a>
+	            <a class="button collect" href="javascript:;" @click="tologin">收藏</a>
 	        </div>
 		</div>
     	<HtmlFooter></HtmlFooter>
@@ -26,7 +26,12 @@
 	import HtmlFooter from './HtmlFooter'
 	export default {
 		name: 'mine',
-		components:{HtmlHeader,HtmlFooter}
+		components:{HtmlHeader,HtmlFooter},
+		methods:{
+			tologin:function(){
+				this.$router.push('/login');
+			}
+		}
 	}
 </script>
 <style lang="less">

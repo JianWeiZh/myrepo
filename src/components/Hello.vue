@@ -12,7 +12,7 @@
           </a>
       </div>
       <ul class="list">
-        <li v-for="(item,index) in msgList" :key="item.id" class="activeable list-item" :data-positionid="item.positionId" :data-companyid="item.companyId">
+        <li v-for="(item,index) in msgList" :key="item.id" class="activeable list-item" :data-positionid="item.positionId" :data-companyid="item.companyId" @click="skip(item.positionId)">
             <img :src="baseUrl + item.companyLogo" class="item-logo">
             <div class="item-desc">
                 <h2 class="item-title">{{item.companyName}}</h2>
@@ -98,6 +98,9 @@ export default {
     },
     tologin:function(){
       this.$router.push('/login');
+    },
+    skip:function(p){
+      window.location.href = 'https://m.lagou.com/jobs/'+ p +'.html';
     }
   }
 }
